@@ -95,14 +95,13 @@ email_format: "html"
 # (required, email specific)
 # a list of email addresses to send alerts to
 email:
-- "shardul.sant@amdocs.com"
+- "<To email>"
 
 cc: 
-- "shardul.sant@amdocs.com"
+- "<CC email>"
 
 
 
-smtp_host: "punemail.corp.amdocs.com"
-#smtp_host: stlmail.corp.amdocs.com
+smtp_host: "<hostname>"
 smtp_port: "25"
 smtp_ssl: false
