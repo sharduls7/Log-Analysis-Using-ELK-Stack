@@ -66,14 +66,13 @@ summary_table_fields:
 # (required, email specific)
 # a list of email addresses to send alerts to
 email:
-- "shardul.sant@amdocs.com"
+- "<To email list>"
 
 cc: 
-- "shardul.sant@amdocs.com"
+- "<CC email list>"
 
 
 
-smtp_host: "punemail.corp.amdocs.com"
-#smtp_host: stlmail.corp.amdocs.com
+smtp_host: "<host name>"
 smtp_port: "25"
 smtp_ssl: false
