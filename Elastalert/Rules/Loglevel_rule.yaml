@@ -1,0 +1,68 @@
+
+name: Loglevel Rule
+
+# (Required)
+# Type of alert.
+# the frequency rule type alerts when num_events events occur with timeframe time
+type: frequency
+
+# (Required)
+# Index to search, wildcard supported
+use_strftime_index: true
+index: cafe_log-%Y.%m.%d
+
+# (Required, frequency specific)
+# Alert when this many documents matching the query occur within a timeframe
+num_events: 75
+
+# (Required, frequency specific)
+# num_events must occur within this amount of time to trigger an alert
+timeframe:
+  minutes: 5
+
+realert:
+ hours: 2
+# (Required)
+# A list of Elasticsearch filters used for find events
+# These filters are joined with AND and nested in a filtered query
+# For more info: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html
+filter:
+- query:
+    query_string:
+      query: "imploglevel: FATAL OR imploglevel: WARN OR imploglevel: EMERGENCY"
+
+# (Required)
+# The alert is use when a match is found
+alert:
+- "email"
+
+from_addr: "noreply@elasticsearch.org"
+
+alert_subject: "ELK Alert: Found issue for '{0}'"
+
+alert_subject_args:
+- name
+
+alert_text_type: alert_text_only
+
+alert_text: "Hello Team,\n\nMore than {0} Important loglevels have been found in the {1}.\nTotal hits = {2}\n\nThanks & Regards,\nELK Team"
+
+alert_text_args:
+- num_events
+- fields.log_type
+- num_hits
+
+# (required, email specific)
+# a list of email addresses to send alerts to
+email:
+- "shardul.sant@amdocs.com"
+
+cc: 
+- "shardul.sant@amdocs.com"
+
+
+
+smtp_host: "punemail.corp.amdocs.com"
+#smtp_host: stlmail.corp.amdocs.com
+smtp_port: "25"
+smtp_ssl: false

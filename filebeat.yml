@@ -1,0 +1,32 @@
+
+filebeat.inputs:
+
+- type: log
+  enabled: true
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+    - C:/Elastic_Stack/data/cafeag.log.20200602_2357/cafe*
+    #- c:\programdata\elasticsearch\logs\*
+  fields:
+   log_type: cafe_log
+   
+  multiline:
+   pattern: '^[[:space:]]+(at|\.{3})|^Caused by:'
+   negate: false
+   match: after
+   
+- type: log
+  enabled: true
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+    - C:/Elastic_Stack/data/access_log/access*
+    
+  fields:
+   log_type: prep_access_log  
+
+#output.console:
+# pretty: true
+
+output.logstash:
+  hosts: ["localhost:5044"]
+  

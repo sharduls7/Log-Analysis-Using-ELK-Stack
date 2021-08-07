@@ -1,0 +1,79 @@
+# Alert when the rate of events exceeds a threshold
+
+# (Optional)
+# Elasticsearch host
+# es_host: elasticsearch.example.com
+
+# (Optional)
+# Elasticsearch port
+# es_port: 14900
+
+# (OptionaL) Connect with SSL to Elasticsearch
+#use_ssl: True
+
+# (Optional) basic-auth username and password for Elasticsearch
+#es_username: someusername
+#es_password: somepassword
+
+# (Required)
+# Rule name, must be unique
+name: Malicious Requests Rule
+
+# (Required)
+# Type of alert.
+# the frequency rule type alerts when num_events events occur with timeframe time
+type: frequency
+
+# (Required)
+# Index to search, wildcard supported
+use_strftime_index: true
+index: cafe_log-%Y.%m.%d
+
+# (Required, frequency specific)
+# Alert when this many documents matching the query occur within a timeframe
+num_events: 1
+
+# (Required, frequency specific)
+# num_events must occur within this amount of time to trigger an alert
+timeframe:
+  minutes: 1
+
+aggregation:
+  minutes: 2
+
+filter:
+- term:
+    response: "403"
+
+# (Required)
+# The alert is use when a match is found
+alert:
+- "email"
+
+from_addr: "noreply@elasticsearch.org"
+
+alert_subject: "ELK Alert-'{0}' : PFB table of IPs with malicious request attempts"
+
+alert_subject_args:
+- name
+
+alert_text_type: aggregation_summary_only
+
+summary_table_fields:
+    - clientip
+    - num_hits
+
+# (required, email specific)
+# a list of email addresses to send alerts to
+email:
+- "shardul.sant@amdocs.com"
+
+cc: 
+- "shardul.sant@amdocs.com"
+
+
+
+smtp_host: "punemail.corp.amdocs.com"
+#smtp_host: stlmail.corp.amdocs.com
+smtp_port: "25"
+smtp_ssl: false

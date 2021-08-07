@@ -1,0 +1,12 @@
+#IMP_LOGLEVEL ((?i)warn(?:ing)?|alert|err(?:or)?|fatal|severe|crit(?:ical)?|emerg(?:ency)?)
+IMP_LOGLEVEL (WARN|ALERT|ERR|ERROR|FATAL|SEVERE|CRIT|CRITICAL|EMERG|EMERGENCY)
+CUSTOM_ERROR (^.*\b[E|e]rror\b.*)
+CUSTOM_WARNING (^.*((\b(?i)warning\b)|\b[w|W]arn\b|((?i)Unable to)).*)
+#EXCEPTION (^java.+Exception)|(^.+Exception.+)|(^.+Exception: .+)
+EXCEPTION_AT (%{SPACE}at %{JAVACLASS}.*\(.*\))
+EXCEPTION_CAUSED_BY (^\s*Caused by:.+)
+EXCEPTION_TEXT (.+?)\n
+FULL_STACKTRACE (%{JAVACLASS:exceptionType}: %{EXCEPTION_TEXT:exceptionText}%{GREEDYDATA:stacktracepart})
+
+
+

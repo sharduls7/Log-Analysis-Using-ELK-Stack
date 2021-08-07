@@ -1,0 +1,108 @@
+# Alert when the rate of events exceeds a threshold
+
+# (Optional)
+# Elasticsearch host
+# es_host: elasticsearch.example.com
+
+# (Optional)
+# Elasticsearch port
+# es_port: 14900
+
+# (OptionaL) Connect with SSL to Elasticsearch
+#use_ssl: True
+
+# (Optional) basic-auth username and password for Elasticsearch
+#es_username: someusername
+#es_password: somepassword
+
+# (Required)
+# Rule name, must be unique
+name: Malicious Requests Rule test
+
+# (Required)
+# Type of alert.
+# the frequency rule type alerts when num_events events occur with timeframe time
+type: frequency
+
+# (Required)
+# Index to search, wildcard supported
+index: cafelog6
+
+# (Required, frequency specific)
+# Alert when this many documents matching the query occur within a timeframe
+num_events: 5
+
+# (Required, frequency specific)
+# num_events must occur within this amount of time to trigger an alert
+timeframe:
+  minutes: 5
+  
+# (Required)
+# A list of Elasticsearch filters used for find events
+# These filters are joined with AND and nested in a filtered query
+# For more info: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html
+filter:
+- term:
+    response: "403"
+    
+raw_count_keys: false
+top_count_keys: ["clientip"]
+# (Required)
+# The alert is use when a match is found
+alert:
+- "email"
+
+    
+from_addr: "noreply@elasticsearch.org"
+
+alert_subject: "ELK Alert: Found issue for ' {0} '"
+
+alert_subject_args:
+- name
+
+alert_text_type: alert_text_only
+alert_text: |
+        <html>
+        <body>
+           <p style="text-align:left;">Hi Team,</p>
+           <p><strong>Please find details in below table :<strong></p>
+           <table style="font-family:arial, sans-serif;border-collapse:collapse;">
+                <tr>
+                 <th style="border:1px solid;text-align:center;">Response Code</th>
+                 <th style="border:1px solid;text-align:center;">Error Timestamp(UTC)</th>
+                </tr>
+                <tr>
+                 <td style="border:1px solid;text-align:center;"> {} </td>
+                 <td style="border:1px solid;text-align:center;"> {} </td>
+                 <td style="border:1px solid;text-align:center;"> {} </td>
+                </tr>
+           </table>
+           <br/>
+           <p style="text-align:left;">Regards,</p>
+           <p style="text-align:left;">ElastAlert Team</p><br/>
+        </body>
+        </html>
+
+alert_text_args: [response, top_count_keys, "@timestamp"]
+
+email_format: "html"
+#alert_text: "More than {0} malicious request attempts have been observed from IP: {1}"
+
+#alert_text_args:
+#- num_events
+#- clientip
+
+# (required, email specific)
+# a list of email addresses to send alerts to
+email:
+- "shardul.sant@amdocs.com"
+
+cc: 
+- "shardul.sant@amdocs.com"
+
+
+
+smtp_host: "punemail.corp.amdocs.com"
+#smtp_host: stlmail.corp.amdocs.com
+smtp_port: "25"
+smtp_ssl: false
